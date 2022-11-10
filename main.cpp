@@ -9,6 +9,7 @@
 #include <iostream>
 #include <fstream>
 #include <bitset>
+// #include <format> C++20, must use /std:c++20 compiler flag :(
 using namespace std;
 
 int main()
@@ -32,7 +33,6 @@ int main()
     {
         // Read in values as hex
         infile >> hex >> code >> address;
-
         // Print as hex
         cout << "Hexadec: ";
         cout << hex << showbase << code << ' ' << address << '\n';
