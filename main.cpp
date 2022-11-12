@@ -27,18 +27,21 @@ int main()
     //   // Do stuff here
     // }
 
-
     // Testing hex and dec output
-    for(int i = 0; i < 5; ++i)
+    for(int i = 0; i < 2; ++i)
     {
         // Read in values as hex
         infile >> hex >> code >> address;
-        // Print as hex
-        cout << "Hexadec: ";
-        cout << hex << showbase << code << ' ' << address << '\n';
-        // Print as dec
-        cout << "Decimal: ";
-        cout << dec << showbase << code << ' ' << address << "\n\n";
+        unsigned int mask = 0xFFC00000;
+
+        // Gives us segment number
+        unsigned int segmentNum = (mask & address) >> 18;
+
+        // See results
+        cout << hex << address << '\n' << segmentNum << '\n';
+        
+        mask = 0x003FFE00;
+        
     }
 
     // Close file stream
