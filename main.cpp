@@ -8,12 +8,12 @@
  */
 #include <iostream>
 #include <fstream>
-#include <vector>
 #include <unordered_set>
-#define newl '\n'
 using namespace std;
 
+// Mask for segment number
 const unsigned int segment_mask = 0x3FF;
+// Mask for unique page number (includes segment number)
 const unsigned int un_page_mask = 0x1FFFFF;
 
 int main()
@@ -21,11 +21,11 @@ int main()
     // Open file stream
     ifstream infile("spice.txt");
 
-    // Stuff to read values
+    // Store code and address
     unsigned int code;
     unsigned int address;
 
-    // Data structs to hold stuff
+    // Unordered sets to store unique values
     unordered_set<unsigned int> segments;
     unordered_set<unsigned int> pages;
 
@@ -33,44 +33,23 @@ int main()
     while (infile >> hex >> code >> address)
     {
         // Get unique page number
-        unsigned int pageNum = (un_page_mask & (address >> 11));
+        unsigned int pageNum = un_page_mask & (address >> 11);
 
         // Get segment number
-        unsigned int segmentNum = (segment_mask & (address >> 22));
-
-        // Insert into sets
-        // https://cplusplus.com/reference/unordered_set/unordered_set/insert/
+        unsigned int segmentNum = segment_mask & (address >> 22);
+        
+        // Store unique values into sets
         segments.insert(segmentNum);
         pages.insert(pageNum);
-
+        
          // See results of bit manipulations
-         cout << hex << address << ' ' << segmentNum << ' ' << pageNum << newl;
+         cout << hex << address << ' ' << segmentNum << ' ' << pageNum << '\n';
     }
 
-    // Testing hex and dec output
-    // for (int i = 0; i < 10; ++i)
-    // {
-    //     // Read in values as hex
-    //     infile >> hex >> code >> address;
-
-    //     // Get unique page number
-    //     unsigned int pageNum = (un_page_mask & (address >> 11));
-
-    //     // Get segment number
-    //     unsigned int segmentNum = (segment_mask & (address >> 22));
-
-    //     // Insert into sets
-    //     // https://cplusplus.com/reference/unordered_set/unordered_set/insert/
-    //     segments.insert(segmentNum);
-    //     pages.insert(pageNum);
-
-    //     // See results of bit manipulations
-    //     cout << hex << address << ' ' << segmentNum << ' ' << pageNum << newl;
-    // }
-
-    cout << "Number of segments: " << segments.size() << newl;
-    cout << "Number of pages: " << pages.size() << newl;
-
+    // Print the number of different segments and pages
+    cout << dec << "Number of segments: " << segments.size() << '\n';
+    cout << dec << "Number of pages: " << pages.size() << '\n';
+    
     // Close file stream
     infile.close();
 }
