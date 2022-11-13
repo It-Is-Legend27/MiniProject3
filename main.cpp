@@ -8,10 +8,13 @@
  */
 #include <iostream>
 #include <fstream>
-#include <bitset>
+#include <vector>
+#include <unordered_set>
 #define newl '\n'
-// #include <format> C++20, must use /std:c++20 compiler flag :(
 using namespace std;
+
+const unsigned int segment_mask = 0x3FF;
+const unsigned int un_page_mask = 0x1FFFFF;
 
 int main()
 {
@@ -21,6 +24,10 @@ int main()
     // Stuff to read values
     unsigned int code;
     unsigned int address;
+
+    // Data structs to hold stuff
+    unordered_set<unsigned int> segments;
+    unordered_set<unsigned int> pages;
     
     // Loop until end of file
     // while(infile >> hex >> code >> address)
@@ -33,15 +40,25 @@ int main()
     {
         // Read in values as hex
         infile >> hex >> code >> address;
-        unsigned int mask = 0x7FF;
-        unsigned int poffset = (mask & address);
-        unsigned int pageNum = (mask & (address >> 11));
-        mask = 0x3FF;
-        unsigned int segmentNum = (mask & (address >> 22));
-        // 010000001011110001110100
-        // See results
-        cout << hex << address << newl<< segmentNum << newl << pageNum << newl << poffset << newl;
+
+        // Get unique page number
+        unsigned int pageNum = (un_page_mask & (address >> 11));
+
+        // Get segment number
+        unsigned int segmentNum = (segment_mask & (address >> 22));
+
+        // Insert into sets
+        // https://cplusplus.com/reference/unordered_set/unordered_set/insert/ 
+        segments.insert(segmentNum);
+        pages.insert(pageNum);
+
+
+        // See results of bit manipulations
+        cout << hex << address << ' ' << segmentNum << ' '<< pageNum << newl;
     }
+
+    cout << "Number of segments: " << segments.size() << newl;
+    cout << "Number of pages: " << pages.size() << newl;
 
     // Close file stream
     infile.close();

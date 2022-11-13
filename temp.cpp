@@ -8,11 +8,13 @@
  */
 #include <iostream>
 #include <fstream>
-#include <bitset>
-#include <array>
+#include <vector>
+#include <unordered_set>
 #define newl '\n'
-// #include <format> C++20, must use /std:c++20 compiler flag :(
 using namespace std;
+
+const unsigned int segment_mask = 0x3FF;
+const unsigned int un_page_mask = 0x1FFFFF;
 
 int main()
 {
@@ -22,7 +24,10 @@ int main()
     // Stuff to read values
     unsigned int code;
     unsigned int address;
-    array<int, 1024> l;
+
+    // Data structs to hold stuff
+    unordered_set<unsigned int> segments;
+    unordered_set<unsigned int> pages;
     
     // Loop until end of file
     // while(infile >> hex >> code >> address)
@@ -35,31 +40,18 @@ int main()
     {
         // Read in values as hex
         infile >> hex >> code >> address;
-        bitset<32> temp = address;
-        unsigned int segNum;
-        string num = temp.to_string();
-        for(int i = 0; i < 22; i++){
-            num.pop_back();
-        }
-        cout << num << endl;
-        bitset<10> seg(num);
-        cout << hex << seg.to_ulong() << newl;
-        unsigned int pageNum;
-        unsigned int poffset;
+
+        /* We probably don't need this */
+        // unsigned int mask = 0x7FF;
+        // unsigned int poffset = (mask & address);
+        // unsigned int pageNum = (mask & (address >> 11));
+
+        unsigned int pageNum = (un_page_mask & (address >> 11));
+        unsigned int segmentNum = (segment_mask & (address >> 22));
         
+        // See results
+        cout << hex << address << newl << segmentNum << newl << pageNum << newl;
     }
-    /*
-    40bc74
-1
-17
-474
-7ffebac8
-1ff
-7d7
-2c8
-    */
-    
-    
 
     // Close file stream
     infile.close();
