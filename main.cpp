@@ -36,7 +36,7 @@ int main()
     // }
 
     // Testing hex and dec output
-    for(int i = 0; i < 2; ++i)
+    for(int i = 0; i < 10; ++i)
     {
         // Read in values as hex
         infile >> hex >> code >> address;
