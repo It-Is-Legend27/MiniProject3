@@ -14,7 +14,7 @@ using namespace std;
 // Mask for segment number
 const unsigned int segment_mask = 0x3FF;
 // Mask for unique page number (includes segment number)
-const unsigned int un_page_mask = 0x1FFFFF;
+const unsigned int page_mask = 0x7FF;
 
 int main()
 {
@@ -33,7 +33,7 @@ int main()
     while (infile >> hex >> code >> address)
     {
         // Get unique page number
-        unsigned int pageNum = un_page_mask & (address >> 11);
+        unsigned int pageNum = page_mask & (address >> 11);
 
         // Get segment number
         unsigned int segmentNum = segment_mask & (address >> 22);
@@ -43,12 +43,12 @@ int main()
         pages.insert(pageNum);
         
          // See results of bit manipulations
-         cout << hex << address << ' ' << segmentNum << ' ' << pageNum << '\n';
+         cout << hex << address << ',' << segmentNum << ',' << pageNum << '\n';
     }
 
     // Print the number of different segments and pages
-    cout << dec << "Number of segments: " << segments.size() << '\n';
-    cout << dec << "Number of pages: " << pages.size() << '\n';
+    // cout << dec << "Number of segments: " << segments.size() << '\n';
+    // cout << dec << "Number of pages: " << pages.size() << '\n';
     
     // Close file stream
     infile.close();
