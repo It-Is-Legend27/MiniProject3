@@ -1,7 +1,9 @@
 /**
  * @file main.cpp
  * @author Angel Badillo, Blake Gauna
- * @brief A simple program for reading several records consisting of a code,
+ * @brief 
+ * Mini Project 3
+ * A simple program for reading several records consisting of a code,
  * and an address.
  * @date 2022-11-17
  *
@@ -14,7 +16,7 @@ using namespace std;
 // Mask for segment number
 const unsigned int segment_mask = 0x3FF;
 
-// Mask for unique page number
+// Mask for page number
 const unsigned int page_mask = 0x7FF;
 
 int main()
